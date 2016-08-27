@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- ~ #{copyright}# -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="hapexam.core.som.mapper.CompanyMapper">
+	<resultMap id="BaseResultMap" type="hapexam.core.som.dto.Company"
+		extends="com.hand.hap.mapper.StdMapper.STD">
+		<result column="COMPANY_ID" property="companyId" jdbcType="DECIMAL" />
+		<result column="COMPANY_NUMBER" property="companyNumber"
+			jdbcType="VARCHAR" />
+		<result column="COMPANY_NAME" property="companyName" jdbcType="VARCHAR" />
+
+	</resultMap>
+
+	<select id="selectByCompany" parameterType="hapexam.core.som.dto.Company"
+		resultMap="BaseResultMap">
+		SELECT company_id,
+		company_number,
+		company_name
+		FROM
+		hap_org_companys
+
+		<where>
+			<if test="companyId != null">
+				company_id = #{companyId,jdbcType=DECIMAL}
+			</if>
+			<if test="companyNumber != null">
+				AND company_number like #{companyNumber,jdbcType=VARCHAR}
+			</if>
+			<if test="companyName != null">
+				AND company_name like
+				#{companyName,jdbcType=VARCHAR}
+			</if>
+
+		</where>
+	</select>
+
+
+</mapper>

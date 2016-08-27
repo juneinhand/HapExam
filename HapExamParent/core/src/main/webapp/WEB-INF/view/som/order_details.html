@@ -1,0 +1,511 @@
+<#-- * description: Fruit.html * version: 1.0 *
+author:taotao.xu@hand-china.com * #{copyright}# * --> <#include
+"../include/head.html">
+
+<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+
+
+
+
+<body style="padding: 10px;">
+	<form id="fruitForm"></form>
+	
+	<ul id="myTab" class="nav nav-tabs"> 
+	
+      <li class="active"><a href="#fruitGrid1">主要</a></li> 
+      <li><a href="#fruitGrid2">其它</a></li> 
+      
+    </ul> 
+	 <div  class="tab-content"> 
+      <div class="tab-pane active" id="fruitGrid1" style="margin: 0; padding: 0"></div> 
+      <div class="tab-pane" id="fruitGrid2" style="margin: 0; padding: 0"></div>
+    
+    </div>
+	 <script src="${base.contextPath}/lib/jquery/jquery-1.9.0.min.js" type="text/javascript"></script>
+	 <script> var jq111 = jQuery.noConflict(true); </script>
+	 
+	 
+	 
+	 	<script type="text/javascript">
+	
+	 	//console.log(${RequestParameters.headerId});
+	 	//console.log(headerId);
+		$(function() {
+			
+			var orderNumber=null;
+			$.ajax({
+				url : '${base.contextPath}/ass/headerById/query?headerId='+${RequestParameters.headerId},
+				type : 'POST',
+				contentType : "application/json;charset=utf-8",
+				cache : false,
+				dataType : 'json',
+				async : false,
+				success : function(data) {
+				
+
+				 orderNumber =	data.rows[0].orderNumber;
+
+				
+
+				}
+			});
+	      
+			
+			
+					
+			window['fruitForm'] = $("#fruitForm")
+					.ligerForm(
+							{
+								fields : [
+{
+	display : '<@spring.message "som.ordernumber"/>',
+	name :'orderNumber',
+	align : 'left',
+	width : 120,
+	 editor : {
+         type : 'text',
+       
+     }, 
+     validate: {
+         required: true
+     }
+},
+								          
+								          
+								          
+								          
+{
+	display : '<@spring.message "som.companyname"/>',
+	name : 'companyName',
+	textField : 'companyName',
+	type : "popup",
+	newline : false,
+	width : 120,
+	 
+     validate: {
+         required: true
+     },
+	options : {
+		type : 'popup',
+		valueField : 'companyId',
+		textField : 'companyName',
+		grid : {
+			columns : [
+					{
+						display : '<@spring.message "som.companynumber"/>',
+						name : "companyNumber",
+						align : 'left',
+						width : 200
+					},
+					{
+						display : '<@spring.message "som.companyname"/>',
+						name : "companyName",
+						align : 'left',
+						width : 200
+					} ],
+
+			url : '${base.contextPath}/ass/company/query',
+			height : 350
+
+		},
+		condition : {
+			inputWidth : 150,
+			labelWidth : 70,
+			fields : [
+					{
+						display : '<@spring.message "som.companynumber"/>',
+						name : "companyNumber",
+						newline : true,
+						type : "text"
+					},
+					{
+						display : '<@spring.message "som.companyname"/>',
+						name : "companyName",
+						newline : false,
+						type : "text"
+					} ]
+		}
+	}
+},
+{
+	display : '<@spring.message "som.customername"/>',
+	name : 'customerName',
+	textField : 'customerName',
+	type : "popup",
+	newline : false,
+	width : 120,
+	
+     validate: {
+         required: true
+     },
+	options : {
+		type : 'popup',
+		valueField : 'customerId',
+		textField : 'customerName',
+		grid : {
+			columns : [
+					{
+						display : '<@spring.message "som.customernumber"/>',
+						name : "customerNumber",
+						align : 'left',
+						width : 200
+					},
+					{
+						display : '<@spring.message "som.customername"/>',
+						name : "customerName",
+						align : 'left',
+						width : 200
+					} ],
+
+			url : '${base.contextPath}/ass/customer/query',
+			height : 350
+
+		},
+		condition : {
+			inputWidth : 150,
+			labelWidth : 70,
+			fields : [
+					{
+						display : '<@spring.message "som.customernumber"/>',
+						name : "customerNumber",
+						newline : true,
+						type : "text"
+					},
+					{
+						display : '<@spring.message "som.customername"/>',
+						name : "customerName",
+						newline : false,
+						type : "text"
+					} ]
+		}
+	}
+}],
+
+								buttons : [ {
+									text : '<@spring.message "hap.save"/>',
+									disabled : false,
+									width : 60
+									
+								},{
+									text : "提交",
+									disabled : false,
+									width : 60
+									
+								},{
+									text : "审批",
+									disabled : false,
+									width : 60
+									
+								},{
+									text : "拒绝",
+									disabled : false,
+									width : 60
+									
+								},{
+									text : "整单删除",
+									disabled : false,
+									width : 60
+									
+								},{
+									text : "单据打印",
+									disabled : false,
+									width : 60
+									
+								},{
+									text : "返回",
+									disabled : false,
+									width : 60
+								} ]
+							});
+
+			window['fruitGrid1'] = $("#fruitGrid1").ligerGrid({
+				unSetValidateAttr : false,
+				columns : [{
+					display : '<@spring.message "som.linenumber"/>',
+					name : 'lineNumber',
+					align : 'center',
+					width : 120
+
+				},{
+					display : '<@spring.message "som.itemcode"/>',
+					name : 'itemCode',
+					align : 'left',
+					width : 120,
+					textField : 'itemCode',
+					editor : {
+						type : 'popup',
+						valueField : 'itemCode',
+						textField : 'itemCode',
+						grid : {
+							columns : [
+									{
+										display : '<@spring.message "som.itemcode"/>',
+										name : "itemCode",
+										align : 'left',
+										width : 200
+									},
+									{
+										display : '<@spring.message "som.itemdescription"/>',
+										name : "itemDescription",
+										align : 'left',
+										width : 200
+									} ],
+							url : '${base.contextPath}/ass/item/query',
+							height : 350
+						},
+						condition : {
+							inputWidth : 150,
+							labelWidth : 70,
+							fields : [
+									{
+										display : '<@spring.message "som.itemcode"/>',
+										name : "itemCode",
+										newline : true,
+										type : "text"
+									},
+									{
+										display : '<@spring.message "som.itemdescription"/>',
+										name : "itemDescription",
+										newline : false,
+										type : "text"
+									} ]
+						}
+					},
+					validate : {
+						required : true
+					}
+				}, {
+					display : '<@spring.message "som.itemdescription"/>',
+					name : 'itemDescription',
+					align : 'center',
+					width : 120
+
+				}, {
+					display : '<@spring.message "som.itemuom"/>',
+					name : 'itemUom',
+					align : 'center',
+					width : 120
+
+				},
+
+				{
+					display : '<@spring.message "som.orderQuantity"/>',
+					name : 'orderQuantity',
+					align : 'center',
+					width : 120,
+					editor : {
+						type : 'text'
+					},
+					validate : {
+						required : true
+					}
+				
+
+				}, {
+					display : '<@spring.message "som.unitSellingPrice"/>',
+					name : 'unitSellingPrice',
+					align : 'center',
+					width : 120,
+					editor : {
+						type : 'text'
+					},
+					validate : {
+						required : true
+					}
+
+				}, {
+					display : '<@spring.message "som.ordermoney"/>',
+					name : 'orderMoney',
+					align : 'center',
+					width : 120	
+				
+
+				}, {
+					display : '<@spring.message "som.description"/>',
+					name : 'description',
+					align : 'center',
+					width : 120,
+					editor : {
+						type : 'text'
+					}
+
+				} ],
+				url : '${base.contextPath}/ass/itemDetail/query?headerId='+${RequestParameters.headerId},
+				toolbar : {
+					items : [ {
+						text : '<@spring.message "hap.new"/>',
+						disable : false,
+						
+						click : function() {
+							fruitGrid1.addRow({})
+						},
+						icon : 'add'
+					},
+					{
+						line : true
+					},{
+						text : '<@spring.message "hap.delete"/>',
+					
+											
+						click : function() {
+							Hap
+							.gridDelete({
+								grid : fruitGrid1,
+								url : '${base.contextPath}/ass/line/delete'
+							})
+							fruitGrid1
+							.deleteSelectedRow();
+						},
+						icon : 'delete'
+					},
+					{
+						line : true
+					},{
+						text : '<@spring.message "hap.save"/>',
+						 click : function() {
+							Hap
+									.gridSave({
+										grid : fruitGrid1,
+										url : '${base.contextPath}/ass/line/submit'
+									})
+						}, 
+						icon : 'save'
+					}]
+				},
+
+				enabledEdit : true,
+				width : '99%',
+				height : '98%',
+				checkbox : true
+			});
+			
+			window['fruitGrid2'] = $("#fruitGrid2").ligerGrid({
+				unSetValidateAttr : false,
+				columns : [ {
+					display : '<@spring.message "som.addition1"/>',
+					name : 'addition1',
+					align : 'center',
+					width : 120,
+					editor : {
+						type : 'text'
+					}
+
+				}, {
+					display : '<@spring.message "som.addition2"/>',
+					name : 'addition2',
+					align : 'center',
+					width : 120,
+					editor : {
+						type : 'text'
+					}
+
+				}, {
+					display : '<@spring.message "som.addition3"/>',
+					name : 'addition3',
+					align : 'center',
+					width : 120,
+					editor : {
+						type : 'text'
+					}
+
+				},
+
+				{
+					display : '<@spring.message "som.addition4"/>',
+					name : 'addition4',
+					align : 'center',
+					width : 120,
+					editor : {
+						type : 'text'
+					}
+
+				}, {
+					display : '<@spring.message "som.addition5"/>',
+					name : 'addition5',
+					align : 'center',
+					width : 120,
+					editor : {
+						type : 'text'
+					}
+
+				} ],
+				url : '${base.contextPath}/ass/itemDetail/query?headerId='+${RequestParameters.headerId},
+				toolbar : {
+					items : [ {
+						text : '<@spring.message "hap.new"/>',
+						click : function() {
+							fruitGrid2.addRow({})
+						},
+						icon : 'add'
+					},
+					{
+						line : true
+					},{
+						text : '<@spring.message "hap.delete"/>',
+						/* click : function() {
+							Hap
+									.gridDelete({
+										grid : fruitGrid1,
+										url : '${base.contextPath}/ass/fruit/delete'
+									})
+							fruitGrid1
+									.deleteSelectedRow();
+						}, */
+						click : function() {
+							fruitGrid2
+							.deleteSelectedRow();
+						},
+						icon : 'delete'
+					},
+					{
+						line : true
+					},{
+						text : '<@spring.message "hap.save"/>',
+						/* click : function() {
+							Hap
+									.gridSave({
+										grid : fruitGrid,
+										url : '${base.contextPath}/ass/fruit/submit'
+									})
+						}, */
+						icon : 'save'
+					}]
+				},
+
+				enabledEdit : true,
+				width : '99%',
+				height : '98%',
+				//checkbox : true
+			});
+			
+		});
+		</script>
+	<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+	<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<script> var jq190 = jQuery.noConflict(true); </script>
+	 <script type="text/javascript">
+	 
+	 (function($) {
+	 $('#myTab a:first').tab('show');//初始化显示哪个tab 
+     
+     $('#myTab a').click(function (e) { 
+    	 
+       e.preventDefault();//阻止a链接的跳转行为 
+       $(this).tab('show');//显示当前选中的链接及关联的content 
+     });
+	 
+	 })(jq190);
+    </script>
+    
+  
+
+
+		
+		
+	
+</body>
+</html>

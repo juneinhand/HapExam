@@ -1,0 +1,287 @@
+<#-- * description: Fruit.html * version: 1.0 *
+author:taotao.xu@hand-china.com * #{copyright}# * --> <#include
+"../include/head.html">
+<body style="padding: 10px;">
+	<form id="fruitForm"></form>
+	<div id="fruitGrid" style="margin: 0; padding: 0"></div>
+	<script type="text/javascript">
+		$(function() {
+			
+			editFunctionResources = function (id) {
+	            window.popWin = $.ligerDialog.open({
+	                title : '订单明细',
+	                width : 1024,
+	                height: 720,
+	                url   : 'order_details.html?headerId=' + id,
+	                	showMax   : false,
+	                    showToggle: true,
+	                    showMin   : false,
+	                    isResize  : true,
+	                    slide     : false
+	            });
+	        };
+
+	    
+			//debugger;
+			window['fruitForm'] = $("#fruitForm")
+					.ligerForm(
+							{
+								fields : [
+{
+	display : '<@spring.message "som.companyname"/>',
+	name : 'companyName',
+	textField : 'companyName',
+	type : "popup",
+	newline : false,
+	width : 120,
+	options : {
+		type : 'popup',
+		valueField : 'companyId',
+		textField : 'companyName',
+		grid : {
+			columns : [
+					{
+						display : '<@spring.message "som.companynumber"/>',
+						name : "companyNumber",
+						align : 'left',
+						width : 200
+					},
+					{
+						display : '<@spring.message "som.companyname"/>',
+						name : "companyName",
+						align : 'left',
+						width : 200
+					} ],
+
+			url : '${base.contextPath}/ass/company/query',
+			height : 350
+
+		},
+		condition : {
+			inputWidth : 150,
+			labelWidth : 70,
+			fields : [
+					{
+						display : '<@spring.message "som.companynumber"/>',
+						name : "companyNumber",
+						newline : true,
+						type : "text"
+					},
+					{
+						display : '<@spring.message "som.companyname"/>',
+						name : "companyName",
+						newline : false,
+						type : "text"
+					} ]
+		}
+	}
+},
+{
+	display : '<@spring.message "som.customername"/>',
+	name : 'customerName',
+	textField : 'customerName',
+	type : "popup",
+	newline : false,
+	width : 120,
+	options : {
+		type : 'popup',
+		valueField : 'customerId',
+		textField : 'customerName',
+		grid : {
+			columns : [
+					{
+						display : '<@spring.message "som.customernumber"/>',
+						name : "customerNumber",
+						align : 'left',
+						width : 200
+					},
+					{
+						display : '<@spring.message "som.customername"/>',
+						name : "customerName",
+						align : 'left',
+						width : 200
+					} ],
+
+			url : '${base.contextPath}/ass/customer/query',
+			height : 350
+
+		},
+		condition : {
+			inputWidth : 150,
+			labelWidth : 70,
+			fields : [
+					{
+						display : '<@spring.message "som.customernumber"/>',
+						name : "customerNumber",
+						newline : true,
+						type : "text"
+					},
+					{
+						display : '<@spring.message "som.customername"/>',
+						name : "customerName",
+						newline : false,
+						type : "text"
+					} ]
+		}
+	}
+},
+{
+	display : '<@spring.message "som.itemdescription"/>',
+	name : 'itemDescription',
+	textField : 'itemDescription',
+	type : "popup",
+	newline : false,
+	width : 120,
+	options : {
+		type : 'popup',
+		valueField : 'inventoryItemId',
+		textField : 'itemDescription',
+		grid : {
+			columns : [
+					{
+						display : '<@spring.message "som.itemcode"/>',
+						name : "itemCode",
+						align : 'left',
+						width : 200
+					},
+					{
+						display : '<@spring.message "som.itemdescription"/>',
+						name : "itemDescription",
+						align : 'left',
+						width : 200
+					} ],
+
+			url : '${base.contextPath}/ass/item/query',
+			height : 350
+
+		},
+		condition : {
+			inputWidth : 150,
+			labelWidth : 70,
+			fields : [
+					{
+						display : '<@spring.message "som.itemcode"/>',
+						name : "itemCode",
+						newline : true,
+						type : "text"
+					},
+					{
+						display : '<@spring.message "som.itemdescription"/>',
+						name : "itemDescription",
+						newline : false,
+						type : "text"
+					} ]
+		}
+	}
+},
+										{
+											display : '<@spring.message "som.ordernumber"/>',
+											name : "orderNumber",
+											//align : 'left',
+											width : 120
+										}, {
+											display : '<@spring.message "som.orderstatus"/>',
+											name : "orderStatus",
+											newline : false,
+											type : 'select',
+											comboboxName : "orderStatus",
+											width : 120,
+											options : {
+												valueField : 'headerId',
+												textField : 'orderStatus',
+												url : '${base.contextPath}/ass/header/query'
+											}
+										}],
+								buttons : [ {
+									text : '<@spring.message "hap.query"/>',
+									disabled : false,
+									width : 60,
+									click : function() {
+										Hap.gridQuery({
+											form : fruitForm,
+											grid : fruitGrid
+										})
+									}
+								},{
+									text : '<@spring.message "hap.reset"/>',
+									disabled : false,
+									width : 60,
+									click : function() {
+										fruitForm.reset();
+									}
+								},{
+									text : '<@spring.message "som.toexcel"/>',
+									disabled : false,
+									width : 60
+								} ]
+							});
+
+			window['fruitGrid'] = $("#fruitGrid").ligerGrid({
+				unSetValidateAttr : false,
+				columns : [ {
+					display : '<@spring.message "som.ordernumber"/>',
+					
+					align : 'center',
+					width : 120,
+					isSort : false,
+                    render : function (rowdata) {
+                    	
+                    	
+                        if (!!rowdata.headerId) {
+                            return '<a href="#" onclick="editFunctionResources(' + rowdata.headerId + ')">'+rowdata.orderNumber+'</a>'
+                        }
+                    }
+
+				}, {
+					display : '<@spring.message "som.companyname"/>',
+					name : 'companyName',
+					align : 'center',
+					width : 120
+
+				}, {
+					display : '<@spring.message "som.customername"/>',
+					name : 'customerName',
+					align : 'center',
+					width : 120
+
+				},
+
+				{
+					display : '<@spring.message "som.orderstatus"/>',
+					name : 'orderStatus',
+					align : 'center',
+					width : 120
+
+				}, {
+					display : '<@spring.message "som.orderdate"/>',
+					name : 'orderDate',
+					align : 'center',
+					width : 120
+
+				}, {
+					display : '<@spring.message "som.ordermoney"/>',
+					name : 'orderMoney',
+					align : 'center',
+					width : 120
+
+				} ],
+				url : '${base.contextPath}/ass/header/query',
+				toolbar : {
+					items : [ {
+						text : '<@spring.message "hap.new"/>',
+						disable : false,
+						
+						icon : 'add',
+						click:editFunctionResources
+					}]
+				},
+
+				enabledEdit : true,
+				width : '99%',
+				height : '98%'
+				//checkbox : true
+			});
+		});
+	</script>
+</body>
+</html>

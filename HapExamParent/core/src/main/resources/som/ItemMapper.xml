@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- ~ #{copyright}# -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="hapexam.core.som.mapper.ItemMapper">
+	<resultMap id="BaseResultMap" type="hapexam.core.som.dto.Item"
+		extends="com.hand.hap.mapper.StdMapper.STD">
+		<result column="INVENTORY_ITEM_ID" property="inventoryItemId"
+			jdbcType="DECIMAL" />
+		<result column="LINE_ID" property="lineId"
+			jdbcType="DECIMAL" />	
+			<result column="LINE_NUMBER" property="lineNumber"
+			jdbcType="DECIMAL" />	
+		<result column="HEADER_ID" property="headerId"
+			jdbcType="DECIMAL" />	
+		<result column="ITEM_CODE" property="itemCode" jdbcType="VARCHAR" />
+		<result column="ITEM_UOM" property="itemUom" jdbcType="VARCHAR" />
+		<result column="ITEM_DESCRIPTION" property="itemDescription"
+			jdbcType="VARCHAR" />
+
+		<result column="START_ACTIVE_DATE" property="startActiveDate"
+			jdbcType="TIMESTAMP" />
+		<result column="END_ACTIVE_DATE" property="endActiveDate"
+			jdbcType="TIMESTAMP" />
+
+
+		<result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
+		<result column="ADDITION1" property="addition1" jdbcType="VARCHAR" />
+		<result column="ADDITION2" property="addition2" jdbcType="VARCHAR" />
+		<result column="ADDITION3" property="addition3" jdbcType="VARCHAR" />
+		<result column="ADDITION4" property="addition4" jdbcType="VARCHAR" />
+		<result column="ADDITION5" property="addition5" jdbcType="VARCHAR" />
+		<result column="ORDERD_QUANTITY" property="orderQuantity"
+			jdbcType="DECIMAL" />
+		<result column="UNIT_SELLING_PRICE" property="unitSellingPrice"
+			jdbcType="DECIMAL" />
+		<result column="ORDER_MONEY" property="orderMoney" jdbcType="DECIMAL" />
+
+	</resultMap>
+
+	<select id="selectByItem" parameterType="hapexam.core.som.dto.Item"
+		resultMap="BaseResultMap">
+		SELECT
+		INVENTORY_ITEM_ID,ITEM_CODE,ITEM_UOM,ITEM_DESCRIPTION,START_ACTIVE_DATE,END_ACTIVE_DATE
+		FROM
+		hap_inv_inventory_items
+
+		<where>
+			<if test="inventoryItemId != null">
+				INVENTORY_ITEM_ID = #{inventoryItemId,jdbcType=DECIMAL}
+			</if>
+			<if test="itemCode != null">
+				AND ITEM_CODE like
+				#{itemCode,jdbcType=VARCHAR}
+			</if>
+			<if test="itemUom != null">
+				AND ITEM_UOM like
+				#{itemUom,jdbcType=VARCHAR}
+			</if>
+
+			<if test="itemDescription != null">
+				AND ITEM_DESCRIPTION like
+				#{itemDescription,jdbcType=VARCHAR}
+			</if>
+
+			<if test="startActiveDate != null">
+				AND START_ACTIVE_DATE =
+				#{startActiveDate,jdbcType=TIMESTAMP}
+			</if>
+
+
+			<if test="endActiveDate != null">
+				AND END_ACTIVE_DATE =
+				#{endActiveDate,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectByItemDetail" parameterType="hapexam.core.som.dto.Item"
+		resultMap="BaseResultMap">
+		select
+		h1.INVENTORY_ITEM_ID,h1.ITEM_CODE,h1.ITEM_UOM,h1.ITEM_DESCRIPTION,h2.HEADER_ID,h2.LINE_ID,h2.LINE_NUMBER,h2.ADDITION1,h2.ADDITION2,h2.ADDITION3,h2.ADDITION4,h2.ADDITION5,h2.DESCRIPTION,h2.ORDERD_QUANTITY,h2.UNIT_SELLING_PRICE,h2.ORDERD_QUANTITY*h2.UNIT_SELLING_PRICE
+		ORDER_MONEY from hap_inv_inventory_items h1,hap_om_order_lines h2
+		WHERE h1.INVENTORY_ITEM_ID=h2.INVENTORY_ITEM_ID and h2.HEADER_ID=#{headerId,jdbcType=DECIMAL}
+		
+	</select>
+
+
+</mapper>
